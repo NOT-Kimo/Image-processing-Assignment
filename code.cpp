@@ -29,6 +29,24 @@ Image B_and_W(const Image &img, string &OutputName)
     output.saveImage("Results/" + OutputName);
     return output;
 }
+Image flip(Image &img, string &OutputName)
+{
+
+    Image output = img;
+    for (int i = 0; i < img.width; i++)
+    {
+
+        for (int j = 0; j < img.height; j++)
+        {
+            for (int k = 0; k < 3; k++)
+            {
+                output(i, j, k) = img((img.width - i), j, k);
+            }
+        }
+    }
+    output.saveImage("Results/" + OutputName);
+    return output;
+}
 void menu()
 {
     cout << "Please enter the Imagename.extension\n";
@@ -37,7 +55,7 @@ void menu()
 
     Image img(ImageName);
     int choice;
-    cout << "1- ....... \n2-black and white\n3-Invert filter\n";
+    cout << "1- ....... \n2-black and white\n3-Invert filter\n5-Horizontal Flip\n";
     cin >> choice;
     cin.ignore();
     if (choice == 2)
@@ -47,6 +65,14 @@ void menu()
         getline(cin, OutputName);
         cout << "\n";
         B_and_W(img, OutputName);
+    }
+    else if (choice == 5)
+    {
+        string OutputName;
+        cout << "Please enter the NewImageName.extension\n";
+        getline(cin, OutputName);
+        cout << "\n";
+        flip(img, OutputName);
     }
 }
 
