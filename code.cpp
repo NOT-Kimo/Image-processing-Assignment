@@ -31,7 +31,7 @@ Image B_and_W(const Image &img, string &OutputName)
 }
 void menu()
 {
-    cout << "Please enter the ImageName.extension\n";
+    cout << "Please enter the hello.extension\n";
     string ImageName;
     getline(cin, ImageName);
 
