@@ -29,7 +29,7 @@ Image B_and_W(const Image &img, string &OutputName)
     output.saveImage("Results/" + OutputName);
     return output;
 }
-Image flip(Image &img, string &OutputName)
+Image Hflip(Image &img, string &OutputName)
 {
 
     Image output = img;
@@ -40,7 +40,25 @@ Image flip(Image &img, string &OutputName)
         {
             for (int k = 0; k < 3; k++)
             {
-                output(i, j, k) = img((img.width - i), j, k);
+                output(i, j, k) = img((img.width - i - 1), j, k);
+            }
+        }
+    }
+    output.saveImage("Results/" + OutputName);
+    return output;
+}
+Image Vflip(Image &img, string &OutputName)
+{
+
+    Image output = img;
+    for (int i = 0; i < img.width; i++)
+    {
+
+        for (int j = 0; j < img.height; j++)
+        {
+            for (int k = 0; k < 3; k++)
+            {
+                output(i, j, k) = img(i, img.height - j - 1, k);
             }
         }
     }
@@ -55,9 +73,9 @@ void menu()
 
     Image img(ImageName);
     int choice;
-    cout << "1- ....... \n2-black and white\n3-Invert filter\n5-Horizontal Flip\n";
+    cout << "1- ....... \n2-black and white\n3-.......\n5-Flip\n";
     cin >> choice;
-    cin.ignore();
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     if (choice == 2)
     {
         string OutputName;
@@ -68,11 +86,25 @@ void menu()
     }
     else if (choice == 5)
     {
-        string OutputName;
-        cout << "Please enter the NewImageName.extension\n";
-        getline(cin, OutputName);
-        cout << "\n";
-        flip(img, OutputName);
+        cout << "1-Horizontal flip\n2-Vertical Flip\n";
+        cin >> choice;
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        if (choice == 1)
+        {
+            string OutputName;
+            cout << "Please enter the NewImageName.extension\n";
+            getline(cin, OutputName);
+            cout << "\n";
+            Hflip(img, OutputName);
+        }
+        else if (choice == 2)
+        {
+            string OutputName;
+            cout << "Please enter the NewImageName.extension\n";
+            getline(cin, OutputName);
+            cout << "\n";
+            Vflip(img, OutputName);
+        }
     }
 }
 
