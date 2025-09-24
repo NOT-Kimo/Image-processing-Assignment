@@ -3,8 +3,19 @@
 #include <string>
 
 using namespace std;
-
-Image B_and_W(const Image &img, string &OutputName)
+Image load_image()
+{
+    cout << "Please enter the Imagename.extension\n";
+    string ImageName;
+    getline(cin, ImageName);
+    Image inp;
+    if (inp.loadNewImage(ImageName))
+        cout << "Image Loaded Successfully\n";
+    else
+        cout << "Failed to Load The Image.\n";
+    return inp;
+}
+Image B_and_W(Image &img)
 {
 
     Image output = img;
@@ -26,10 +37,9 @@ Image B_and_W(const Image &img, string &OutputName)
             }
         }
     }
-    output.saveImage("Results/" + OutputName);
     return output;
 }
-Image Hflip(Image &img, string &OutputName)
+Image Hflip(Image &img)
 {
 
     Image output = img;
@@ -44,10 +54,9 @@ Image Hflip(Image &img, string &OutputName)
             }
         }
     }
-    output.saveImage("Results/" + OutputName);
     return output;
 }
-Image Vflip(Image &img, string &OutputName)
+Image Vflip(Image &img)
 {
 
     Image output = img;
@@ -62,55 +71,82 @@ Image Vflip(Image &img, string &OutputName)
             }
         }
     }
-    output.saveImage("Results/" + OutputName);
     return output;
 }
-void menu()
+void save(Image &output)
 {
-    cout << "Please enter the Imagename.extension\n";
-    string ImageName;
-    getline(cin, ImageName);
-
-    Image img(ImageName);
+    string OutputName;
+    cout << "Please enter the NewImageName.extension\n";
+    getline(cin, OutputName);
+    cout << "\n";
+    if (output.saveImage("Results/" + OutputName))
+        cout << "Image Saved Successfully!.\n";
+    else
+        cout << "Failed to Save The Image.\n";
+}
+int main()
+{
+    Image img;
     int choice;
-    cout << "1- ....... \n2-black and white\n3-.......\n5-Flip\n";
-    cin >> choice;
-    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    if (choice == 2)
+    bool exit_flag = false;
+    bool img_loaded = false;
+    bool saved_flag;
+    string menu_str = "1- Load Image\n"
+                      "2- Filter 1 //.......\n"
+                      "3- Filter 2 //Black & White\n"
+                      "4- Filter 3 //.......\n"
+                      "5- Filter 4 //.......\n"
+                      "6- Filter 5 //Flip\n"
+                      "7- Filter 6 //.......\n"
+                      "8- Save the image\n"
+                      "0- Exit\n";
+
+    do
     {
-        string OutputName;
-        cout << "Please enter the NewImageName.extension\n";
-        getline(cin, OutputName);
-        cout << "\n";
-        B_and_W(img, OutputName);
-    }
-    else if (choice == 5)
-    {
-        cout << "1-Horizontal flip\n2-Vertical Flip\n";
+        cout << menu_str;
         cin >> choice;
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         if (choice == 1)
         {
-            string OutputName;
-            cout << "Please enter the NewImageName.extension\n";
-            getline(cin, OutputName);
-            cout << "\n";
-            Hflip(img, OutputName);
+            img = load_image();
+            img_loaded = true;
+            saved_flag = false;
         }
-        else if (choice == 2)
+        else if (choice == 3 && img_loaded)
         {
-            string OutputName;
-            cout << "Please enter the NewImageName.extension\n";
-            getline(cin, OutputName);
-            cout << "\n";
-            Vflip(img, OutputName);
+            img = B_and_W(img);
         }
-    }
-}
+        else if (choice == 5 && img_loaded)
+        {
+            cout << "1-Horizontal flip\n2-Vertical Flip\n";
+            cin >> choice;
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if (choice == 1)
+                img = Hflip(img);
+            else if (choice == 2)
+                img = Vflip(img);
+        }
+        else if (choice == 8 && img_loaded)
+        {
+            save(img);
+            saved_flag = true;
+        }
+        else if (choice == 0)
+        {
+            if (saved_flag == false)
+            {
+                cout << "Do you want to save current changes?\n1-Yes\n2-No\n";
+                cin >> choice;
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                if (choice == 1)
+                    save(img);
+            }
+            exit_flag = true;
+        }
+        else{
+            cout << "Load an Image First.\n";
+        }
+    } while (exit_flag == false);
 
-int main()
-{
-
-    menu();
     return 0;
 }
