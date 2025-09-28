@@ -3,18 +3,49 @@
 #include <string>
 
 using namespace std;
+
+string CurrentName;
+
+
 Image load_image()
 {
-    cout << "Please enter the Imagename.extension\n";
-    string ImageName;
-    getline(cin, ImageName);
     Image inp;
-    if (inp.loadNewImage(ImageName))
-        cout << "Image Loaded Successfully\n";
-    else
-        cout << "Failed to Load The Image.\n";
+    string ImageName;
+
+    cout << "Please enter the Imagename.extension ex: (.png , .bmp , .jpg , .jpeg , .tga )"<<'\n';
+
+    while(true){
+        
+    
+        getline(cin, ImageName);
+
+        try
+        {
+            
+            if (inp.loadNewImage(ImageName))
+            {
+                cout << "Image loaded successfully!" << endl;
+
+                CurrentName = ImageName;
+                break; 
+            }
+        }
+        catch (const invalid_argument& e)
+        {
+            
+            
+            
+            cout << "Please check the filename or extension and try again." << '\n';
+            
+        }
+    }
     return inp;
 }
+
+
+    
+    
+
 Image B_and_W(Image &img)
 {
 
@@ -40,7 +71,6 @@ Image B_and_W(Image &img)
     return output;
 }
 
-
 Image InvertedImg(Image &img) {
 
     Image output = img;
@@ -60,6 +90,7 @@ Image InvertedImg(Image &img) {
     
     return output;
 }
+
 Image Hflip(Image &img)
 {
 
@@ -77,6 +108,7 @@ Image Hflip(Image &img)
     }
     return output;
 }
+
 Image Vflip(Image &img)
 {
 
@@ -115,7 +147,6 @@ Image Rotate90Clockwise(Image img) {
     return Rotated;
 }
 
-
 Image Rotate180(Image img) {
 
     
@@ -132,7 +163,6 @@ Image Rotate180(Image img) {
     }
     return output;
 }
-
 
 Image Rotate270(Image img) {
 
@@ -152,10 +182,15 @@ Image Rotate270(Image img) {
     return Rotated;
 }
 
-
 void save(Image &output)
-{
-    string OutputName;
+{   cout << "1- overwrite the existing image ?\n2- Save new image\n";
+    int x;
+    cin >> x;
+    if(x == 1){
+        output.saveImage(CurrentName);
+    }
+    if(x == 2){
+        string OutputName;
     cout << "Please enter the NewImageName.extension\n";
     getline(cin, OutputName);
     cout << "\n";
@@ -163,6 +198,9 @@ void save(Image &output)
         cout << "Image Saved Successfully!.\n";
     else
         cout << "Failed to Save The Image.\n";
+
+    }
+    
 }
 
 void menu(){
