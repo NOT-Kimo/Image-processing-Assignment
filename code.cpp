@@ -6,46 +6,31 @@ using namespace std;
 
 string CurrentName;
 
-
 Image load_image()
 {
     Image inp;
     string ImageName;
+    cout << "Please enter the Imagename.extension ex: (.png , .bmp , .jpg , .jpeg , .tga )" << '\n';
 
-    cout << "Please enter the Imagename.extension ex: (.png , .bmp , .jpg , .jpeg , .tga )"<<'\n';
-
-    while(true){
-        
-    
+    while (true)
+    {
         getline(cin, ImageName);
-
         try
         {
-            
             if (inp.loadNewImage(ImageName))
             {
                 cout << "Image loaded successfully!" << endl;
-
                 CurrentName = ImageName;
-                break; 
+                break;
             }
         }
-        catch (const invalid_argument& e)
+        catch (const invalid_argument &e)
         {
-            
-            
-            
             cout << "Please check the filename or extension and try again." << '\n';
-            
         }
     }
     return inp;
 }
-
-
-    
-    
-
 Image B_and_W(Image &img)
 {
 
@@ -70,27 +55,25 @@ Image B_and_W(Image &img)
     }
     return output;
 }
-
-Image InvertedImg(Image &img) {
+Image InvertedImg(Image &img)
+{
 
     Image output = img;
-    for ( int i =0 ; i < img.width ; i++) {
+    for (int i = 0; i < img.width; i++)
+    {
 
+        for (int j = 0; j < img.height; j++)
+        {
 
-        for ( int j =0 ; j < img.height; j++) {
-
-
-            for (int k =0 ; k < 3; k++) {
-                output(i,j,k) = 255 -img(i,j,k);
-
+            for (int k = 0; k < 3; k++)
+            {
+                output(i, j, k) = 255 - img(i, j, k);
             }
-
         }
     }
-    
+
     return output;
 }
-
 Image Hflip(Image &img)
 {
 
@@ -108,7 +91,6 @@ Image Hflip(Image &img)
     }
     return output;
 }
-
 Image Vflip(Image &img)
 {
 
@@ -126,89 +108,104 @@ Image Vflip(Image &img)
     }
     return output;
 }
+Image Rotate90Clockwise(Image img)
+{
 
-Image Rotate90Clockwise(Image img) {
+    Image Rotated(img.height, img.width);
 
-    Image Rotated(img.height,img.width);
+    for (int i = 0; i < img.width; i++)
+    {
 
-    for (int  i= 0 ; i < img.width ; i++) {
+        for (int j = 0; j < img.height; j++)
+        {
 
-
-        for (int j =0 ; j < img.height ; j++) {
-
-
-            for (int k= 0 ; k < 3 ; k++) {
-                Rotated(img.height -1-j,i,k) = img(i,j,k);
-                
-
+            for (int k = 0; k < 3; k++)
+            {
+                Rotated(img.height - 1 - j, i, k) = img(i, j, k);
             }
         }
     }
     return Rotated;
 }
+Image Rotate180(Image img)
+{
 
-Image Rotate180(Image img) {
-
-    
     Image output = img;
 
-    for (int  i= 0 ; i < img.width ; i++) {
+    for (int i = 0; i < img.width; i++)
+    {
 
-        for (int j =0 ; j < img.height ; j++) {
+        for (int j = 0; j < img.height; j++)
+        {
 
-            for (int k= 0 ; k < 3 ; k++) {
-                output(img.width-1-i,img.height-1-j,k) = img(i,j,k);
+            for (int k = 0; k < 3; k++)
+            {
+                output(img.width - 1 - i, img.height - 1 - j, k) = img(i, j, k);
             }
         }
     }
     return output;
 }
+Image Rotate270(Image img)
+{
 
-Image Rotate270(Image img) {
+    Image Rotated(img.height, img.width);
 
-    
-    Image Rotated(img.height,img.width);
+    for (int i = 0; i < img.width; i++)
+    {
 
-    for (int  i= 0 ; i < img.width ; i++) {
+        for (int j = 0; j < img.height; j++)
+        {
 
-        for (int j =0 ; j < img.height ; j++) {
+            for (int k = 0; k < 3; k++)
+            {
 
-            for (int k= 0 ; k < 3 ; k++) {
-
-                Rotated(j,img.width-1-i,k) = img(i,j,k);
+                Rotated(j, img.width - 1 - i, k) = img(i, j, k);
             }
         }
     }
     return Rotated;
 }
-
 void save(Image &output)
-{   cout << "1- overwrite the existing image ?\n2- Save new image\n";
+{
+    cout << "1- overwrite the existing image ?\n2- Save new image\n";
     int x;
     cin >> x;
-    if(x == 1){
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    if (x == 1)
+    {
         output.saveImage(CurrentName);
     }
-    if(x == 2){
+    if (x == 2)
+    {
         string OutputName;
-    cout << "Please enter the NewImageName.extension\n";
-    getline(cin, OutputName);
-    cout << "\n";
-    if (output.saveImage("Results/" + OutputName))
-        cout << "Image Saved Successfully!.\n";
-    else
-        cout << "Failed to Save The Image.\n";
+        cout << "Please enter the NewImageName.extension\n";
 
+        while (true)
+        {
+            getline(cin, OutputName);
+            try
+            {
+                if (output.saveImage(OutputName))
+                    cout << "Image Saved Successfully!.\n";
+                break;
+            }
+            catch (const invalid_argument &e)
+            {
+                cout << "Failed to Save The Image.\nPlease check the filename or extension and try again." << '\n';
+            }
+        }
     }
-    
 }
-
-void menu(){
+void menu()
+{
     Image img;
+    img = load_image();
     int choice;
     bool exit_flag = false;
     bool img_loaded = false;
-    bool saved_flag;
+    bool saved_flag = false;
     string menu_str = "0- Load Image\n"
                       "1- Filter 1 //.......\n"
                       "2- Filter 2 //Black & White\n"
@@ -226,19 +223,29 @@ void menu(){
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         if (choice == 0)
         {
+            if (saved_flag == false)
+            {
+                cout << "Do you want to save current changes?\n1-Yes\n2-No\n";
+                cin >> choice;
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+                if (choice == 1)
+                    save(img);
+            }
             img = load_image();
             img_loaded = true;
             saved_flag = false;
         }
-        else if (choice == 2 && img_loaded)
+        else if (choice == 2)
         {
             img = B_and_W(img);
         }
 
-        else if (choice == 3 && img_loaded){
+        else if (choice == 3)
+        {
             img = InvertedImg(img);
         }
-        else if (choice == 5 && img_loaded)
+        else if (choice == 5)
         {
             cout << "1-Horizontal flip\n2-Vertical Flip\n";
             cin >> choice;
@@ -249,24 +256,28 @@ void menu(){
                 img = Vflip(img);
         }
 
-        else if (choice == 6){
+        else if (choice == 6)
+        {
             cout << "1- 90 \n2- 180 \n3- 270\n";
-            int x; cin >> x;
-            
-            if (x == 1){
+            int x;
+            cin >> x;
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+            if (x == 1)
+            {
                 img = Rotate90Clockwise(img);
             }
-            else if (x == 2){
+            else if (x == 2)
+            {
                 img = Rotate180(img);
-
             }
-            else if(x== 3){
+            else if (x == 3)
+            {
                 img = Rotate270(img);
             }
         }
 
-
-        else if (choice == 7 && img_loaded)
+        else if (choice == 7)
         {
             save(img);
             saved_flag = true;
@@ -283,19 +294,11 @@ void menu(){
             }
             exit_flag = true;
         }
-        else{
-            cout << "Load an Image First.\n";
-        }
     } while (exit_flag == false);
-
 }
-
-
 
 int main()
 {
-
     menu();
-    
     return 0;
 }
