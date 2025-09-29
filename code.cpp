@@ -1,5 +1,6 @@
 #include "Image_Class.h"
 #include <iostream>
+#include <algorithm>
 #include <string>
 
 using namespace std;
@@ -30,6 +31,23 @@ Image load_image()
         }
     }
     return inp;
+}
+Image Grayscaling(Image &img) {
+
+    Image output = img;
+    for ( int i = 0 ; i < img.width ; i++) {
+
+
+        for ( int j = 0 ; j < img.height ; j++) {
+
+            int average = (img(i, j, 0) + img(i, j, 1) + img(i, j, 2)) / 3;
+
+            for (int k = 0 ; k < 3; k++) {
+                output(i,j,k) = average ;
+            }
+        }
+    }
+    return output;
 }
 Image B_and_W(Image &img)
 {
@@ -74,6 +92,82 @@ Image InvertedImg(Image &img)
 
     return output;
 }
+Image merge(Image &img1) {
+    cout << "Please enter 2nd Imagename.extension ex: (.png , .bmp , .jpg , .jpeg , .tga )\n";
+    string name;
+    getline(cin, name);
+    Image img2(name);
+    cout << "Image Loaded Successfully\n";
+
+    int w1 = img1.width , h1 = img1.height ;
+    int w2 = img2.width , h2 = img2.height ;
+
+    if (w1 == w2 && h1 == h2) {
+        Image output(w1, h1);
+        for (int i = 0; i < w1; i++) {
+            for (int j = 0; j < h1; j++) {
+                for (int k = 0; k < 3; k++) {
+                    output(i,j,k) = (img1(i,j,k) + img2(i,j,k)) / 2;
+                }
+            }
+        }
+        return output;
+    }
+
+    else {
+        cout << "choose an option \n1-Biggest area \n2-Common area" << endl ;
+        int op;
+        cin >> op ;
+
+        if (op == 1) {
+            int w = max(w1, w2);
+            int h = max(h1, h2);
+            Image output(w, h);
+            for (int i = 0; i < w; i++) {
+                for (int j = 0; j < h; j++) {
+                    for (int k = 0; k < 3; k++) {
+                        output(i,j,k) = 0;
+                    }
+                }
+            }
+            for (int i = 0; i < w1; i++) {
+                for (int j = 0; j < h1; j++) {
+                    for (int k = 0; k < 3; k++) {
+                        output(i,j,k) = img1(i,j,k);
+                    }
+                }
+            }
+            for (int i = 0; i < w2; i++) {
+                for (int j = 0; j < h2; j++) {
+                    for (int k = 0; k < 3; k++) {
+                        output(i,j,k) = (output(i,j,k) + img2(i,j,k)) / 2;
+                    }
+                }
+            }
+            return output;
+        }
+
+        else if (op == 2) {
+            int w = min(w1, w2);
+            int h = min(h1, h2);
+            Image output(w, h);
+            for (int i = 0; i < w; i++) {
+                for (int j = 0; j < h; j++) {
+                    for (int k = 0; k < 3; k++) {
+                        output(i,j,k) = (img1(i,j,k) + img2(i,j,k)) / 2;
+                    }
+                }
+            }
+            return output;
+        }
+
+        else {
+            cout << "please choose an option from the list" ;
+            return img1;
+        }
+    }
+}
+
 Image Hflip(Image &img)
 {
 
@@ -207,10 +301,10 @@ void menu()
     bool img_loaded = false;
     bool saved_flag = false;
     string menu_str = "0- Load Image\n"
-                      "1- Filter 1 //.......\n"
+                      "1- Filter 1 //Grayscaling\n"
                       "2- Filter 2 //Black & White\n"
                       "3- Filter 3 //Invert\n"
-                      "4- Filter 4 //.......\n"
+                      "4- Filter 4 //Merge two images\n"
                       "5- Filter 5 //Flip\n"
                       "6- Filter 6 //Rotate Clockwise\n"
                       "7- Save the image\n"
@@ -236,6 +330,12 @@ void menu()
             img_loaded = true;
             saved_flag = false;
         }
+
+        else if (choice == 1)
+        {
+            img = Grayscaling(img) ;
+        }
+
         else if (choice == 2)
         {
             img = B_and_W(img);
@@ -245,6 +345,11 @@ void menu()
         {
             img = InvertedImg(img);
         }
+        
+        else if (choice == 4 ){
+            img = merge(img);
+        }
+
         else if (choice == 5)
         {
             cout << "1-Horizontal flip\n2-Vertical Flip\n";
