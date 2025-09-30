@@ -1,3 +1,33 @@
+/* Team Details:
+Section: Not Registered yet but attended in S7/S8 with TA/ Marwa Ahmed
+
+Member 1:
+Name: Omar Ahmed Mostafa Allam
+ID: 20240362
+Filter 1 Graysacling
+Filter 4 Merge two images
+
+Member 2:
+Name: Karim Mohamed Ramadan
+ID: 20240423
+Filter 2 black and white
+Filter 5 horizontal and vertical flip
+
+Member 3:
+Name: Youssef Aly El-Sayed
+ID: 20242408
+Filter 3 Inverted
+Filter 4 Rotate
+_________________________________________________________________________________
+
+File Detials:
+-> The .cpp file contains all the required details that was mentioned in the assignment pdf
+
+-> Note that: some filters require more than 1 option like Filter 5 (Flip) and Filter 6 (Rotate) each option
+has its own function while Filter 4 (Merge) options are in the same function
+
+*/
+
 #include "Image_Class.h"
 #include <iostream>
 #include <algorithm>
