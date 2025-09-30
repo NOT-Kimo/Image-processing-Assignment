@@ -5,6 +5,7 @@
 
 using namespace std;
 
+
 string CurrentName;
 
 Image load_image()
@@ -93,11 +94,9 @@ Image InvertedImg(Image &img)
     return output;
 }
 Image merge(Image &img1) {
-    cout << "Please enter 2nd Imagename.extension ex: (.png , .bmp , .jpg , .jpeg , .tga )\n";
-    string name;
-    getline(cin, name);
-    Image img2(name);
-    cout << "Image Loaded Successfully\n";
+    Image img2;
+    cout << "For 2nd image :";
+    img2 = load_image() ;
 
     int w1 = img1.width , h1 = img1.height ;
     int w2 = img2.width , h2 = img2.height ;
@@ -167,7 +166,6 @@ Image merge(Image &img1) {
         }
     }
 }
-
 Image Hflip(Image &img)
 {
 
@@ -398,6 +396,9 @@ void menu()
                     save(img);
             }
             exit_flag = true;
+        }
+        else {
+        cout << "please choose an option from the list" << endl ;
         }
     } while (exit_flag == false);
 }
