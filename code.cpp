@@ -305,6 +305,28 @@ Image crop(Image img,int x,int y,int w,int h){
     return output;
 
 }
+
+Image Frame(Image img ,int thickness, unsigned char R, unsigned char G , unsigned char B){
+    Image Framed(img.width + 2*thickness , img.height + 2*thickness);
+
+    for (int i=0; i < Framed.width ; i++){
+        for (int j =0; j < Framed.height ; j++){
+            Framed(i,j,0) = R;
+            Framed(i,j,1) = G;
+            Framed(i,j,2) = B;
+        }
+    }
+
+    for(int i = 0; i < img.width; i++) {
+        for (int j = 0; j < img.height; j++) {
+            for(int k= 0 ; k < 3 ; k++){
+                Framed(i + thickness, j + thickness,k) = img(i,j,k);
+            }
+
+        }
+    }
+    return Framed;
+}
 void save(Image &output)
 {
     cout << "1- overwrite the existing image ?\n2- Save new image\n";
@@ -352,9 +374,10 @@ void menu()
                       "4- Filter 4 //Merge two images\n"
                       "5- Filter 5 //Flip\n"
                       "6- Filter 6 //Rotate Clockwise\n"
-                      "9- Filter 8 //Crop\n"
+                      "8- Filter 8 //Crop\n"
+                      "9- Filter 9 //Add Frame\n"
                       "7- Save the image\n"
-                      "8- Exit\n";
+                      "99- Exit\n";
 
     do
     {
@@ -433,7 +456,7 @@ void menu()
             save(img);
             saved_flag = true;
         }
-        else if (choice == 9){
+        else if (choice == 8){
             cout << "Enter x and y of starting point\n";
             int x,y;
             cin >> x >> y;
@@ -443,9 +466,19 @@ void menu()
             cin >> w >> h;
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             img = crop(img, x,y,w,h);
-
         }
-        else if (choice == 8)
+        else if (choice == 9)
+        {
+            int thick;
+            cout << "please enter required thickness\n ";
+            cin >> thick;
+            cout << "Please enter R G B values (0 <= R,G,B <= 255)\n";
+            int r,g,b;
+            cin >> r >> g >> b;
+            img = Frame(img,thick,r,g,b);
+        }
+
+        else if (choice == 99)
         {
             if (saved_flag == false)
             {
