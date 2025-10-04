@@ -288,6 +288,23 @@ Image Rotate270(Image img)
     }
     return Rotated;
 }
+Image crop(Image img,int x,int y,int w,int h){
+    Image output(w,h);
+    for (int i = x; i < output.height; i++)
+    {
+
+        for (int j = y; j < output.width ; j++)
+        {
+
+            for (int k = 0; k < 3; k++)
+            {
+                output(i, j, k) = img(i,j,k);
+            }
+        }
+    }
+    return output;
+
+}
 void save(Image &output)
 {
     cout << "1- overwrite the existing image ?\n2- Save new image\n";
@@ -335,6 +352,7 @@ void menu()
                       "4- Filter 4 //Merge two images\n"
                       "5- Filter 5 //Flip\n"
                       "6- Filter 6 //Rotate Clockwise\n"
+                      "9- Filter 8 //Crop\n"
                       "7- Save the image\n"
                       "8- Exit\n";
 
@@ -414,6 +432,18 @@ void menu()
         {
             save(img);
             saved_flag = true;
+        }
+        else if (choice == 9){
+            cout << "Enter x and y of starting point\n";
+            int x,y;
+            cin >> x >> y;
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cout << "Enter the new dimentions of the image with spaces between them.\n";
+            int w,h;
+            cin >> w >> h;
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            img = crop(img, x,y,w,h);
+
         }
         else if (choice == 8)
         {
