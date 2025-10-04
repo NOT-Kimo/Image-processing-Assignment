@@ -327,6 +327,45 @@ Image Frame(Image img ,int thickness, unsigned char R, unsigned char G , unsigne
     }
     return Framed;
 }
+
+Image Blur(Image &img, float radius)
+{
+    Image blurred = img;
+
+    for (int i = 0; i < img.width; i++)
+    {
+        for (int j = 0; j < img.height; j++)
+        {
+            int rSum = 0, gSum = 0, bSum = 0;
+            int count = 0;
+
+            for (int x = -radius; x <= radius; x++)
+            {
+                for (int y = -radius; y <= radius; y++)
+                {
+                    int nx = i + x;
+                    int ny = j + y;
+
+                    
+                    if (nx >= 0 && nx < img.width && ny >= 0 && ny < img.height)
+                    {
+                        rSum += img(nx, ny, 0);
+                        gSum += img(nx, ny, 1);
+                        bSum += img(nx, ny, 2);
+                        count++;
+                    }
+                }
+            }
+
+            blurred(i, j, 0) = rSum / count;
+            blurred(i, j, 1) = gSum / count;
+            blurred(i, j, 2) = bSum / count;
+        }
+    }
+
+    return blurred;
+}
+
 void save(Image &output)
 {
     cout << "1- overwrite the existing image ?\n2- Save new image\n";
@@ -376,6 +415,7 @@ void menu()
                       "6- Filter 6 //Rotate Clockwise\n"
                       "8- Filter 8 //Crop\n"
                       "9- Filter 9 //Add Frame\n"
+                      "12-Filter 12 //Blur\n"
                       "7- Save the image\n"
                       "99- Exit\n";
 
@@ -476,6 +516,13 @@ void menu()
             int r,g,b;
             cin >> r >> g >> b;
             img = Frame(img,thick,r,g,b);
+        }
+        else if (choice == 12){
+            float r;
+            cout << "Please enter blur level from 1 to 100\n";
+            cin >> r;
+            r = r/10;
+            img = Blur(img,r);
         }
 
         else if (choice == 99)
