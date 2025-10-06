@@ -448,7 +448,7 @@ Image resize(Image &img)
     }
 }
 
-Image oldTV(Image img, int noiseVal, int scanlineIntensity, int distortionLevel) {
+Image oldTV(Image &img, int noiseVal, int scanlineIntensity, int distortionLevel) {
     srand(time(0));
 
     for (int i = 0; i < img.width; i++) {
@@ -655,10 +655,7 @@ void menu()
         }
 
         else if(choice == 15){
-            int n,l,c;
-            cout << "please enter noise -> lines -> colour values\n";
-            cin >> n >> l >> c;
-            img = oldTV(img,n,l,c);
+            img = oldTV(img,30,40,20);
         }
 
         else if (choice == 99)
