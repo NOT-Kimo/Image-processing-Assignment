@@ -311,6 +311,40 @@ Image Rotate270(Image img)
     }
     return Rotated;
 }
+Image brightness(Image &img){
+Image output = img ;
+cout << "please choose an option (make image brightness..):\n1- Darker by 50%\n2- lighter by 50%\n" ;
+int option ;
+cin >> option ;
+if (option==1){
+    for (int i=0 ; i<img.width ; i++ ){
+
+        for (int j=0 ; j<img.height ; j++ ){
+
+            for (int k=0 ; k<3 ; k++ ){
+                output(i,j,k) = img(i,j,k)*0.5 ;
+            }
+        }
+    }
+}
+
+if (option==2){
+    int value ;
+    for (int i=0 ; i<img.width ; i++ ){
+
+        for (int j=0 ; j<img.height ; j++ ){
+
+            for (int k=0 ; k<3 ; k++ ){
+                value = img(i,j,k)*1.5 ;
+                if (value>255) {value = 255 ;}
+                output(i,j,k) = value ;
+            }
+        }
+    }
+}
+return output ;
+
+}
 Image crop(Image &img, int x, int y, int w, int h)
 {
     Image output(w, h);
@@ -354,41 +388,31 @@ Image Frame(Image img, int thickness, unsigned char R, unsigned char G, unsigned
     }
     return Framed;
 }
-Image Blur(Image &img, float radius)
-{
-    Image blurred = img;
+Image edge(Image &img){
+img = B_and_W(img) ;
+Image output = img ;
 
-    for (int i = 0; i < img.width; i++)
-    {
-        for (int j = 0; j < img.height; j++)
-        {
-            int rSum = 0, gSum = 0, bSum = 0;
-            int count = 0;
+for (int i = 1; i < output.width-1; i++) {
 
-            for (int x = -radius; x <= radius; x++)
-            {
-                for (int y = -radius; y <= radius; y++)
-                {
-                    int nx = i + x;
-                    int ny = j + y;
+    for (int j = 1; j < output.height-1; j++) {
 
-                    if (nx >= 0 && nx < img.width && ny >= 0 && ny < img.height)
-                    {
-                        rSum += img(nx, ny, 0);
-                        gSum += img(nx, ny, 1);
-                        bSum += img(nx, ny, 2);
-                        count++;
-                    }
-                }
+        int value = img(i, j, 0);
+        bool edge = false;
+
+        if (img(i+1, j, 0) != value) { edge = true ;}
+        else if (img(i-1, j, 0) != value) {edge = true ;}
+        else if (img(i, j+1, 0) != value) {edge = true ;}
+        else if (img(i, j-1, 0) != value) {edge = true ;}
+
+        for (int k = 0; k < 3; k++) {
+            if (edge) { output(i, j, k) = 0 ;}   
+            else { output(i, j, k) = 255 ;}
             }
-
-            blurred(i, j, 0) = rSum / count;
-            blurred(i, j, 1) = gSum / count;
-            blurred(i, j, 2) = bSum / count;
         }
     }
 
-    return blurred;
+return output ;
+
 }
 Image resize(Image &img)
 {
@@ -445,6 +469,42 @@ Image resize(Image &img)
         final = output;
     }
     return final;
+}
+Image Blur(Image &img, float radius)
+{
+    Image blurred = img;
+
+    for (int i = 0; i < img.width; i++)
+    {
+        for (int j = 0; j < img.height; j++)
+        {
+            int rSum = 0, gSum = 0, bSum = 0;
+            int count = 0;
+
+            for (int x = -radius; x <= radius; x++)
+            {
+                for (int y = -radius; y <= radius; y++)
+                {
+                    int nx = i + x;
+                    int ny = j + y;
+
+                    if (nx >= 0 && nx < img.width && ny >= 0 && ny < img.height)
+                    {
+                        rSum += img(nx, ny, 0);
+                        gSum += img(nx, ny, 1);
+                        bSum += img(nx, ny, 2);
+                        count++;
+                    }
+                }
+            }
+
+            blurred(i, j, 0) = rSum / count;
+            blurred(i, j, 1) = gSum / count;
+            blurred(i, j, 2) = bSum / count;
+        }
+    }
+
+    return blurred;
 }
 Image oldTV(Image &img, int noiseLevel, int scanlineIntensity, int distortionLevel)
 {
@@ -542,12 +602,14 @@ void menu()
                       "4 - Filter 4 //Merge two images\n"
                       "5 - Filter 5 //Flip\n"
                       "6 - Filter 6 //Rotate Clockwise\n"
+                      "7 - Filter 7 //Darken or Lighten Image brightness\n"
                       "8 - Filter 8 //Crop\n"
                       "9 - Filter 9 //Add Frame\n"
+                      "10- Filter 10 //Detect Image Edges\n"
                       "11- Filter 11//Resize\n"
                       "12- Filter 12 //Blur\n"
                       "15- Filter 15 //old tv\n"
-                      "7 - Save the image\n"
+                      "98- Save the image\n"
                       "99- Exit\n";
 
     do
@@ -625,8 +687,7 @@ void menu()
 
         else if (choice == 7)
         {
-            save(img);
-            saved_flag = true;
+            img = brightness(img) ;
         }
         else if (choice == 8)
         {
@@ -650,6 +711,10 @@ void menu()
             cin >> r >> g >> b;
             img = Frame(img, thick, r, g, b);
         }
+        else if (choice == 10)
+        {
+            img = edge(img) ;
+        }
         else if (choice == 11)
         {
             img = resize(img);
@@ -667,7 +732,11 @@ void menu()
         {
             img = oldTV(img, 30, 40, 20);
         }
-
+        else if (choice == 98)
+        {
+            save(img);
+            saved_flag = true;
+        }
         else if (choice == 99)
         {
             if (saved_flag == false)
