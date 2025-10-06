@@ -6,18 +6,25 @@ Name: Omar Ahmed Mostafa Allam
 ID: 20240362
 Filter 1 Graysacling
 Filter 4 Merge two images
+Filter 7 Darken and Lighten Image brightness
+Filter 10 Detect Image Edges
 
 Member 2:
 Name: Karim Mohamed Ramadan
 ID: 20240423
 Filter 2 black and white
 Filter 5 horizontal and vertical flip
+Filter 8 Crop Image
+Filter 11 Resize Image
 
 Member 3:
 Name: Youssef Aly El-Sayed
 ID: 20242408
 Filter 3 Inverted
-Filter 4 Rotate
+Filter 6 Rotate
+Filter 9 Add Frame
+Filter 12 Blur
+Filter 15 Old TV (bonus)
 _________________________________________________________________________________
 
 File Detials:
