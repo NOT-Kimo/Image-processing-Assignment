@@ -446,7 +446,7 @@ Image resize(Image &img)
     }
     return final;
 }
-Image oldTV(Image &img, int noiseVal, int scanlineIntensity, int distortionLevel)
+Image oldTV(Image &img, int noiseLevel, int scanlineIntensity, int distortionLevel)
 {
     srand(time(0));
 
@@ -456,7 +456,7 @@ Image oldTV(Image &img, int noiseVal, int scanlineIntensity, int distortionLevel
         {
             for (int k = 0; k < 3; k++)
             {
-                int noise = (rand() % (2 * noiseVal + 1)) - noiseVal;
+                int noise = (rand() % (2 * noiseLevel + 1)) - noiseLevel;
                 int value = img(i, j, k) + noise;
                 img(i, j, k) = max(0, min(255, value));
             }
