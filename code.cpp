@@ -328,7 +328,6 @@ Image crop(Image &img, int x, int y, int w, int h)
     }
     return output;
 }
-
 Image Frame(Image img, int thickness, unsigned char R, unsigned char G, unsigned char B)
 {
     Image Framed(img.width + 2 * thickness, img.height + 2 * thickness);
@@ -355,7 +354,6 @@ Image Frame(Image img, int thickness, unsigned char R, unsigned char G, unsigned
     }
     return Framed;
 }
-
 Image Blur(Image &img, float radius)
 {
     Image blurred = img;
@@ -395,10 +393,10 @@ Image Blur(Image &img, float radius)
 Image resize(Image &img)
 {
     int choice;
-    cout << "1- Choose a new Ratio\n2-Add new dimensions\n";
+    cout << "1-Choose a new Ratio\n2-Add new dimensions\n";
     cin >> choice;
     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
+    Image final;
     if (choice == 1)
     {
         double ratio;
@@ -422,7 +420,7 @@ Image resize(Image &img)
                 }
             }
         }
-        return output;
+        final = output;
     }
     else if (choice == 2)
     {
@@ -444,16 +442,20 @@ Image resize(Image &img)
                 }
             }
         }
-        return output;
+        final = output;
     }
+    return final;
 }
-
-Image oldTV(Image &img, int noiseVal, int scanlineIntensity, int distortionLevel) {
+Image oldTV(Image &img, int noiseVal, int scanlineIntensity, int distortionLevel)
+{
     srand(time(0));
 
-    for (int i = 0; i < img.width; i++) {
-        for (int j = 0; j < img.height; j++) {
-            for (int k = 0; k < 3; k++) {
+    for (int i = 0; i < img.width; i++)
+    {
+        for (int j = 0; j < img.height; j++)
+        {
+            for (int k = 0; k < 3; k++)
+            {
                 int noise = (rand() % (2 * noiseVal + 1)) - noiseVal;
                 int value = img(i, j, k) + noise;
                 img(i, j, k) = max(0, min(255, value));
@@ -461,10 +463,14 @@ Image oldTV(Image &img, int noiseVal, int scanlineIntensity, int distortionLevel
         }
     }
 
-    for (int y = 0; y < img.height; y++) {
-        if (y % 2 == 0) {
-            for (int x = 0; x < img.width; x++) {
-                for (int k = 0; k < 3; k++) {
+    for (int y = 0; y < img.height; y++)
+    {
+        if (y % 2 == 0)
+        {
+            for (int x = 0; x < img.width; x++)
+            {
+                for (int k = 0; k < 3; k++)
+                {
                     int value = img(x, y, k) - scanlineIntensity;
                     img(x, y, k) = max(0, value);
                 }
@@ -473,9 +479,12 @@ Image oldTV(Image &img, int noiseVal, int scanlineIntensity, int distortionLevel
     }
 
     srand(time(0) + 1);
-    for (int i = 0; i < img.width; i++) {
-        for (int j = 0; j < img.height; j++) {
-            for (int k = 0; k < 3; k++) {
+    for (int i = 0; i < img.width; i++)
+    {
+        for (int j = 0; j < img.height; j++)
+        {
+            for (int k = 0; k < 3; k++)
+            {
                 int shift = (rand() % (2 * distortionLevel + 1)) - distortionLevel;
                 int value = img(i, j, k) + shift;
                 img(i, j, k) = max(0, min(255, value));
@@ -526,19 +535,19 @@ void menu()
     bool exit_flag = false;
     bool img_loaded = false;
     bool saved_flag = false;
-    string menu_str = "0- Load Image\n"
-                      "1- Filter 1 //Grayscaling\n"
-                      "2- Filter 2 //Black & White\n"
-                      "3- Filter 3 //Invert\n"
-                      "4- Filter 4 //Merge two images\n"
-                      "5- Filter 5 //Flip\n"
-                      "6- Filter 6 //Rotate Clockwise\n"
-                      "8- Filter 8 //Crop\n"
-                      "9- Filter 9 //Add Frame\n"
-                      "11-Filter 11//Resize\n"
-                      "12-Filter 12 //Blur\n"
+    string menu_str = "0 - Load Image\n"
+                      "1 - Filter 1 //Grayscaling\n"
+                      "2 - Filter 2 //Black & White\n"
+                      "3 - Filter 3 //Invert\n"
+                      "4 - Filter 4 //Merge two images\n"
+                      "5 - Filter 5 //Flip\n"
+                      "6 - Filter 6 //Rotate Clockwise\n"
+                      "8 - Filter 8 //Crop\n"
+                      "9 - Filter 9 //Add Frame\n"
+                      "11- Filter 11//Resize\n"
+                      "12- Filter 12 //Blur\n"
                       "15- Filter 15 //old tv\n"
-                      "7- Save the image\n"
+                      "7 - Save the image\n"
                       "99- Exit\n";
 
     do
@@ -654,8 +663,9 @@ void menu()
             img = Blur(img, r);
         }
 
-        else if(choice == 15){
-            img = oldTV(img,30,40,20);
+        else if (choice == 15)
+        {
+            img = oldTV(img, 30, 40, 20);
         }
 
         else if (choice == 99)
