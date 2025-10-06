@@ -447,6 +447,45 @@ Image resize(Image &img)
         return output;
     }
 }
+
+Image oldTV(Image img, int noiseVal, int scanlineIntensity, int distortionLevel) {
+    srand(time(0));
+
+    for (int i = 0; i < img.width; i++) {
+        for (int j = 0; j < img.height; j++) {
+            for (int k = 0; k < 3; k++) {
+                int noise = (rand() % (2 * noiseVal + 1)) - noiseVal;
+                int value = img(i, j, k) + noise;
+                img(i, j, k) = max(0, min(255, value));
+            }
+        }
+    }
+
+    for (int y = 0; y < img.height; y++) {
+        if (y % 2 == 0) {
+            for (int x = 0; x < img.width; x++) {
+                for (int k = 0; k < 3; k++) {
+                    int value = img(x, y, k) - scanlineIntensity;
+                    img(x, y, k) = max(0, value);
+                }
+            }
+        }
+    }
+
+    srand(time(0) + 1);
+    for (int i = 0; i < img.width; i++) {
+        for (int j = 0; j < img.height; j++) {
+            for (int k = 0; k < 3; k++) {
+                int shift = (rand() % (2 * distortionLevel + 1)) - distortionLevel;
+                int value = img(i, j, k) + shift;
+                img(i, j, k) = max(0, min(255, value));
+            }
+        }
+    }
+
+    return img;
+}
+
 void save(Image &output)
 {
     cout << "1- overwrite the existing image ?\n2- Save new image\n";
@@ -498,6 +537,7 @@ void menu()
                       "9- Filter 9 //Add Frame\n"
                       "11-Filter 11//Resize\n"
                       "12-Filter 12 //Blur\n"
+                      "15- Filter 15 //old tv\n"
                       "7- Save the image\n"
                       "99- Exit\n";
 
@@ -612,6 +652,13 @@ void menu()
             cin >> r;
             r = r / 10;
             img = Blur(img, r);
+        }
+
+        else if(choice == 15){
+            int n,l,c;
+            cout << "please enter noise -> lines -> colour values\n";
+            cin >> n >> l >> c;
+            img = oldTV(img,n,l,c);
         }
 
         else if (choice == 99)
