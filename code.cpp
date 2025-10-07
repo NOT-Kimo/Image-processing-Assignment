@@ -16,6 +16,8 @@ Filter 2 black and white
 Filter 5 horizontal and vertical flip
 Filter 8 Crop Image
 Filter 11 Resize Image
+Filter 14 Oil Painting (bonus)
+Filter 17 Infrared (bonus)
 
 Member 3:
 Name: Youssef Aly El-Sayed
@@ -318,39 +320,50 @@ Image Rotate270(Image img)
     }
     return Rotated;
 }
-Image brightness(Image &img){
-Image output = img ;
-cout << "please choose an option (make image brightness..):\n1- Darker by 50%\n2- lighter by 50%\n" ;
-int option ;
-cin >> option ;
-if (option==1){
-    for (int i=0 ; i<img.width ; i++ ){
+Image brightness(Image &img)
+{
+    Image output = img;
+    cout << "please choose an option (make image brightness..):\n1- Darker by 50%\n2- lighter by 50%\n";
+    int option;
+    cin >> option;
+    if (option == 1)
+    {
+        for (int i = 0; i < img.width; i++)
+        {
 
-        for (int j=0 ; j<img.height ; j++ ){
+            for (int j = 0; j < img.height; j++)
+            {
 
-            for (int k=0 ; k<3 ; k++ ){
-                output(i,j,k) = img(i,j,k)*0.5 ;
+                for (int k = 0; k < 3; k++)
+                {
+                    output(i, j, k) = img(i, j, k) * 0.5;
+                }
             }
         }
     }
-}
 
-if (option==2){
-    int value ;
-    for (int i=0 ; i<img.width ; i++ ){
+    if (option == 2)
+    {
+        int value;
+        for (int i = 0; i < img.width; i++)
+        {
 
-        for (int j=0 ; j<img.height ; j++ ){
+            for (int j = 0; j < img.height; j++)
+            {
 
-            for (int k=0 ; k<3 ; k++ ){
-                value = img(i,j,k)*1.5 ;
-                if (value>255) {value = 255 ;}
-                output(i,j,k) = value ;
+                for (int k = 0; k < 3; k++)
+                {
+                    value = img(i, j, k) * 1.5;
+                    if (value > 255)
+                    {
+                        value = 255;
+                    }
+                    output(i, j, k) = value;
+                }
             }
         }
     }
-}
-return output ;
-
+    return output;
 }
 Image crop(Image &img, int x, int y, int w, int h)
 {
@@ -395,31 +408,52 @@ Image Frame(Image img, int thickness, unsigned char R, unsigned char G, unsigned
     }
     return Framed;
 }
-Image edge(Image &img){
-img = B_and_W(img) ;
-Image output = img ;
+Image edge(Image &img)
+{
+    img = B_and_W(img);
+    Image output = img;
 
-for (int i = 1; i < output.width-1; i++) {
+    for (int i = 1; i < output.width - 1; i++)
+    {
 
-    for (int j = 1; j < output.height-1; j++) {
+        for (int j = 1; j < output.height - 1; j++)
+        {
 
-        int value = img(i, j, 0);
-        bool edge = false;
+            int value = img(i, j, 0);
+            bool edge = false;
 
-        if (img(i+1, j, 0) != value) { edge = true ;}
-        else if (img(i-1, j, 0) != value) {edge = true ;}
-        else if (img(i, j+1, 0) != value) {edge = true ;}
-        else if (img(i, j-1, 0) != value) {edge = true ;}
+            if (img(i + 1, j, 0) != value)
+            {
+                edge = true;
+            }
+            else if (img(i - 1, j, 0) != value)
+            {
+                edge = true;
+            }
+            else if (img(i, j + 1, 0) != value)
+            {
+                edge = true;
+            }
+            else if (img(i, j - 1, 0) != value)
+            {
+                edge = true;
+            }
 
-        for (int k = 0; k < 3; k++) {
-            if (edge) { output(i, j, k) = 0 ;}   
-            else { output(i, j, k) = 255 ;}
+            for (int k = 0; k < 3; k++)
+            {
+                if (edge)
+                {
+                    output(i, j, k) = 0;
+                }
+                else
+                {
+                    output(i, j, k) = 255;
+                }
             }
         }
     }
 
-return output ;
-
+    return output;
 }
 Image resize(Image &img)
 {
@@ -497,6 +531,7 @@ Image Blur(Image &img, float radius)
 
                     if (nx >= 0 && nx < img.width && ny >= 0 && ny < img.height)
                     {
+
                         rSum += img(nx, ny, 0);
                         gSum += img(nx, ny, 1);
                         bSum += img(nx, ny, 2);
@@ -561,6 +596,70 @@ Image oldTV(Image &img, int noiseLevel, int scanlineIntensity, int distortionLev
 
     return img;
 }
+Image oil(Image &img)
+{
+    Image output = img;
+    int radius = 2;
+    for (int i = 0; i < img.width; i++)
+    {
+        for (int j = 0; j < img.height; j++)
+        {
+            int rSum[16] = {0};
+            int gSum[16] = {0};
+            int bSum[16] = {0};
+            int count[16] = {0};
+
+            for (int x = -radius; x <= radius; x++)
+            {
+                for (int y = -radius; y <= radius; y++)
+                {
+                    int nx = i + x;
+                    int ny = j + y;
+
+                    if (nx >= 0 && nx < img.width && ny >= 0 && ny < img.height)
+                    {
+                        int average = (img(nx, ny, 0) + img(nx, ny, 1) + img(nx, ny, 2)) / 3;
+                        int bin = average * 16 / 256;
+                        rSum[bin] += img(nx, ny, 0);
+                        gSum[bin] += img(nx, ny, 1);
+                        bSum[bin] += img(nx, ny, 2);
+                        count[bin]++;
+                    }
+                }
+            }
+            int maxBin = 0;
+            for (int z = 1; z < 16; z++)
+            {
+                if (count[z] > count[maxBin])
+                    maxBin = z;
+            }
+            output(i, j, 0) = rSum[maxBin] / count[maxBin];
+            output(i, j, 1) = gSum[maxBin] / count[maxBin];
+            output(i, j, 2) = bSum[maxBin] / count[maxBin];
+        }
+    }
+
+    return output;
+}
+
+Image IR(Image &img)
+{
+    Image output = img;
+    for (int i = 0; i < img.width; i++)
+    {
+        for (int j = 0; j < img.height; j++)
+        {
+            float average = (img(i, j, 0) + img(i, j, 1) + img(i, j, 2)) / 3;
+            float percent = average / 255;
+
+            output(i, j, 0) = 255;
+            output(i, j, 1) = 255 * (1 - percent);
+            output(i, j, 2) = 255 * (1 - percent);
+        }
+    }
+
+    return output;
+}
 
 void save(Image &output)
 {
@@ -603,19 +702,21 @@ void menu()
     bool img_loaded = false;
     bool saved_flag = false;
     string menu_str = "0 - Load Image\n"
-                      "1 - Filter 1 //Grayscaling\n"
-                      "2 - Filter 2 //Black & White\n"
-                      "3 - Filter 3 //Invert\n"
-                      "4 - Filter 4 //Merge two images\n"
-                      "5 - Filter 5 //Flip\n"
-                      "6 - Filter 6 //Rotate Clockwise\n"
-                      "7 - Filter 7 //Darken or Lighten Image brightness\n"
-                      "8 - Filter 8 //Crop\n"
-                      "9 - Filter 9 //Add Frame\n"
+                      "1 - Filter 1  //Grayscaling\n"
+                      "2 - Filter 2  //Black & White\n"
+                      "3 - Filter 3  //Invert\n"
+                      "4 - Filter 4  //Merge two images\n"
+                      "5 - Filter 5  //Flip\n"
+                      "6 - Filter 6  //Rotate Clockwise\n"
+                      "7 - Filter 7  //Darken or Lighten Image brightness\n"
+                      "8 - Filter 8  //Crop\n"
+                      "9 - Filter 9  //Add Frame\n"
                       "10- Filter 10 //Detect Image Edges\n"
-                      "11- Filter 11//Resize\n"
+                      "11- Filter 11 //Resize\n"
                       "12- Filter 12 //Blur\n"
+                      "14- Filter 14 //Oil Painting\n"
                       "15- Filter 15 //old tv\n"
+                      "17- Filter 17 //Infrared\n"
                       "98- Save the image\n"
                       "99- Exit\n";
 
@@ -694,7 +795,7 @@ void menu()
 
         else if (choice == 7)
         {
-            img = brightness(img) ;
+            img = brightness(img);
         }
         else if (choice == 8)
         {
@@ -720,7 +821,7 @@ void menu()
         }
         else if (choice == 10)
         {
-            img = edge(img) ;
+            img = edge(img);
         }
         else if (choice == 11)
         {
@@ -734,10 +835,17 @@ void menu()
             r = r / 10;
             img = Blur(img, r);
         }
-
+        else if (choice == 14)
+        {
+            img = oil(img);
+        }
         else if (choice == 15)
         {
             img = oldTV(img, 30, 40, 20);
+        }
+        else if (choice == 17)
+        {
+            img = IR(img);
         }
         else if (choice == 98)
         {
