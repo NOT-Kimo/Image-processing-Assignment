@@ -641,7 +641,6 @@ Image oil(Image &img)
 
     return output;
 }
-
 Image IR(Image &img)
 {
     Image output = img;
