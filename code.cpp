@@ -1,5 +1,5 @@
 /* Team Details:
-Section: Not Registered yet but attended in S7/S8 with TA/ Marwa Ahmed
+Section: S1 with TA/ Hassan Mourad
 
 Member 1:
 Name: Omar Ahmed Mostafa Allam
@@ -27,6 +27,7 @@ Filter 6 Rotate
 Filter 9 Add Frame
 Filter 12 Blur
 Filter 15 Old TV (bonus)
+Filter 18 Skew (Bonus)
 _________________________________________________________________________________
 
 File Detials:
@@ -659,6 +660,44 @@ Image IR(Image &img)
 
     return output;
 }
+Image Skew(Image &img, float angle)
+{
+    float radians = angle * M_PI / 180.0;
+    int shift = (img.height * tan(radians));
+
+    Image skewed(img.width + abs(shift), img.height);
+
+    for (int i = 0; i < skewed.width; i++)
+    {
+        for (int j = 0; j < skewed.height; j++)
+        {
+            skewed(i, j, 0) = 255;
+            skewed(i, j, 1) = 255;
+            skewed(i, j, 2) = 255;
+        }
+    }
+
+    for (int y = 0; y < img.height; y++)
+    {
+
+        int offset = ((img.height - y - 1) * tan(radians));
+
+        for (int x = 0; x < img.width; x++)
+        {
+            int newX = x + offset;
+
+            if (newX >= 0 && newX < skewed.width)
+            {
+                for (int c = 0; c < 3; c++)
+                {
+                    skewed(newX, y, c) = img(x, y, c);
+                }
+            }
+        }
+    }
+
+    return skewed;
+}
 
 void save(Image &output)
 {
@@ -716,8 +755,9 @@ void menu()
                       "14- Filter 14 //Oil Painting\n"
                       "15- Filter 15 //old tv\n"
                       "17- Filter 17 //Infrared\n"
-                      "98- Save the image\n"
-                      "99- Exit\n";
+                      "18- Filter 18 //Skew\n"
+                      "19- Save The Image\n"
+                      "20- Exit\n";
 
     do
     {
@@ -846,12 +886,16 @@ void menu()
         {
             img = IR(img);
         }
-        else if (choice == 98)
+        else if (choice == 18)
+        {
+            img = Skew(img, 45);
+        }
+        else if (choice == 19)
         {
             save(img);
             saved_flag = true;
         }
-        else if (choice == 99)
+        else if (choice == 20)
         {
             if (saved_flag == false)
             {
@@ -865,7 +909,7 @@ void menu()
         }
         else
         {
-            cout << "please choose an option from the list" << endl;
+            cout << "Please choose a valid option from the list." << endl;
         }
     } while (exit_flag == false);
 }
