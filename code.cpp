@@ -1,17 +1,14 @@
-/* Team Details:
+/*
+doc link : https://docs.google.com/document/d/1jnSFvSInTjKJFeSfDTxlyNAA3ekOtpq0/edit?usp=sharing&ouid=109779782750322106060&rtpof=true&sd=true
+
+video link :
+
+repo link : https://github.com/NOT-Kimo/Image-processing-Assignment
+
+Team Details:
 Section: S1 with TA/ Hassan Mourad
 
 Member 1:
-Name: Omar Ahmed Mostafa Allam
-ID: 20240362
-Filter 1 Grayscaling
-Filter 4 Merge two images
-Filter 7 Darken and Lighten Image brightness
-Filter 10 Detect Image Edges
-Filter 13 Add sunlight (bonus)
-Filter 16 purple (bonus)
-
-Member 2:
 Name: Karim Mohamed Ramadan
 ID: 20240423
 Filter 2 black and white
@@ -21,7 +18,7 @@ Filter 11 Resize Image
 Filter 14 Oil Painting (bonus)
 Filter 17 Infrared (bonus)
 
-Member 3:
+Member 2:
 Name: Youssef Aly El-Sayed
 ID: 20242408
 Filter 3 Inverted
@@ -30,13 +27,24 @@ Filter 9 Add Frame
 Filter 12 Blur
 Filter 15 Old TV (bonus)
 Filter 18 Skew (Bonus)
+
+Member 3:
+Name: Omar Ahmed Mostafa Allam
+ID: 20240362
+Filter 1 Grayscaling
+Filter 4 Merge two images
+Filter 7 Darken and Lighten Image brightness
+Filter 10 Detect Image Edges
+Filter 13 Add sunlight (bonus)
+Filter 16 purple (bonus)
 _________________________________________________________________________________
 
 File Detials:
 -> The .cpp file contains all the required details that was mentioned in the assignment pdf
 
 -> Note that: some filters require more than 1 option like Filter 5 (Flip) and Filter 6 (Rotate) each option
-has its own function while Filter 4 (Merge) options are in the same function
+has its own function while Filter 4 (Merge) , Filter 7 (Brightness) , Filter 11 (resize) options 
+are in the same function .
 
 */
 
@@ -471,7 +479,9 @@ Image resize(Image &img)
             {
                 for (int k = 0; k < 3; k++)
                 {
-                    output(i, j, k) = img(round(i * wr), round(j * hr), k);
+                    int src_i = min((int)round(i * wr), img.width - 1);
+                    int src_j = min((int)round(j * hr), img.height - 1);
+                    output(i, j, k) = img(src_i, src_j, k);
                 }
             }
         }
