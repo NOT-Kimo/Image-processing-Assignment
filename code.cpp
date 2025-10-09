@@ -1,7 +1,7 @@
 /*
-doc link : https://docs.google.com/document/d/1jnSFvSInTjKJFeSfDTxlyNAA3ekOtpq0/edit?usp=sharing&ouid=109779782750322106060&rtpof=true&sd=true
+Document link : https://drive.google.com/file/d/1FwDVUjfuS7G2Unn6V921STSNw6hYHPdt/view?usp=drive_link
 
-video link : https://drive.google.com/drive/folders/1QIFBy87zMWU3kh9bl0CVtVJ503Qj7zkY?usp=sharing
+Video link : https://drive.google.com/file/d/17SbF8XvGnsMIJssaZ5NfepdOoTm9UQzq/view?usp=drive_link
 
 repo link : https://github.com/NOT-Kimo/Image-processing-Assignment
 
