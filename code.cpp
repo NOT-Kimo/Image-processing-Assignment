@@ -513,8 +513,37 @@ Image resize(Image &img)
 }
 Image Blur(Image &img, float radius)
 {
+    Image temp = img;
     Image blurred = img;
+    int r = (int)radius;
 
+    for (int j = 0; j < img.height; j++)
+    {
+        for (int i = 0; i < img.width; i++)
+        {
+            int rSum = 0, gSum = 0, bSum = 0;
+            int count = 0;
+
+            for (int x = -r; x <= r; x++)
+            {
+                int nx = i + x;
+
+                if (nx >= 0 && nx < img.width)
+                {
+                    rSum += img(nx, j, 0);
+                    gSum += img(nx, j, 1);
+                    bSum += img(nx, j, 2);
+                    count++;
+                }
+            }
+
+            temp(i, j, 0) = rSum / count;
+            temp(i, j, 1) = gSum / count;
+            temp(i, j, 2) = bSum / count;
+        }
+    }
+
+    
     for (int i = 0; i < img.width; i++)
     {
         for (int j = 0; j < img.height; j++)
@@ -522,21 +551,16 @@ Image Blur(Image &img, float radius)
             int rSum = 0, gSum = 0, bSum = 0;
             int count = 0;
 
-            for (int x = -radius; x <= radius; x++)
+            for (int y = -r; y <= r; y++)
             {
-                for (int y = -radius; y <= radius; y++)
+                int ny = j + y;
+
+                if (ny >= 0 && ny < img.height)
                 {
-                    int nx = i + x;
-                    int ny = j + y;
-
-                    if (nx >= 0 && nx < img.width && ny >= 0 && ny < img.height)
-                    {
-
-                        rSum += img(nx, ny, 0);
-                        gSum += img(nx, ny, 1);
-                        bSum += img(nx, ny, 2);
-                        count++;
-                    }
+                    rSum += temp(i, ny, 0);
+                    gSum += temp(i, ny, 1);
+                    bSum += temp(i, ny, 2);
+                    count++;
                 }
             }
 
@@ -916,7 +940,6 @@ void menu()
             float r;
             cout << "Please enter blur level from 1 to 100\n";
             cin >> r;
-            r = r / 10;
             img = Blur(img, r);
         }
         else if (choice == 13)
