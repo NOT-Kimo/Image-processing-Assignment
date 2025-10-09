@@ -1,7 +1,7 @@
 /*
 doc link : https://docs.google.com/document/d/1jnSFvSInTjKJFeSfDTxlyNAA3ekOtpq0/edit?usp=sharing&ouid=109779782750322106060&rtpof=true&sd=true
 
-video link :
+video link : https://drive.google.com/drive/folders/1QIFBy87zMWU3kh9bl0CVtVJ503Qj7zkY?usp=sharing
 
 repo link : https://github.com/NOT-Kimo/Image-processing-Assignment
 
@@ -938,7 +938,7 @@ void menu()
         else if (choice == 12)
         {
             float r;
-            cout << "Please enter blur level from 1 to 100\n";
+            cout << "Please enter blur level from 1 to 100 (Recommended: 30)\n";
             cin >> r;
             img = Blur(img, r);
         }
