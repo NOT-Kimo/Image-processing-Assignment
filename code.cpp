@@ -170,39 +170,26 @@ Image merge(Image &img1)
 
         if (op == 1)
         {
-            int w = max(w1, w2);
-            int h = max(h1, h2);
-            Image output(w, h);
-            for (int i = 0; i < w; i++)
+        int w = max(w1, w2);
+        int h = max(h1, h2);
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        Image output(w, h);
+        double wr1, hr1 , wr2, hr2 ;
+        hr1 = (double)img1.height / h;
+        wr1 = (double)img1.width / w;
+        hr2 = (double)img2.height / h;
+        wr2 = (double)img2.width / w;
+        for (int i = 0; i < w; i++)
+        {
+            for (int j = 0; j < h; j++)
             {
-                for (int j = 0; j < h; j++)
+                for (int k = 0; k < 3; k++)
                 {
-                    for (int k = 0; k < 3; k++)
-                    {
-                        output(i, j, k) = 0;
-                    }
+                    output(i, j, k) = (img1(round(i * wr1), round(j * hr1), k) +
+                                      img2(round(i * wr2), round(j * hr2), k))/2 ;
                 }
             }
-            for (int i = 0; i < w1; i++)
-            {
-                for (int j = 0; j < h1; j++)
-                {
-                    for (int k = 0; k < 3; k++)
-                    {
-                        output(i, j, k) = img1(i, j, k);
-                    }
-                }
-            }
-            for (int i = 0; i < w2; i++)
-            {
-                for (int j = 0; j < h2; j++)
-                {
-                    for (int k = 0; k < 3; k++)
-                    {
-                        output(i, j, k) = (output(i, j, k) + img2(i, j, k)) / 2;
-                    }
-                }
-            }
+        }
             return output;
         }
 
@@ -664,6 +651,30 @@ Image oldTV(Image &img, int noiseLevel, int scanlineIntensity, int distortionLev
 
     return img;
 }
+Image purple(Image &img){
+    Image output = img ;
+    for (int i=0 ; i<img.width ; i++){
+
+        for (int j=0 ; j<img.height ; j++){
+
+            float red = img(i,j,0)*1.1 + 4.8 ;
+            float green = img(i,j,1)*0.81 -2.2 ;
+            float blue = img(i,j,2)*1.18 + 3.7 ;
+
+            if(red>255){red=255 ;}
+            if(green>255){green=255 ;}
+            if(blue>255){blue=255 ;}
+            if (red <0) red=0 ;
+            if (green <0) green=0 ;
+            if (blue <0) blue=0 ;
+
+            output(i,j,0) = red ;
+            output(i,j,1) = green ;
+            output(i,j,2) = blue ;
+        }
+    }
+    return output ;
+}
 Image IR(Image &img)
 {
     Image output = img;
@@ -681,27 +692,6 @@ Image IR(Image &img)
     }
 
     return output;
-}
-Image purple(Image &img){
-    Image output = img ;
-    for (int i=0 ; i<img.width ; i++){
-
-        for (int j=0 ; j<img.height ; j++){
-
-            float red = img(i,j,0)*1.1 + 4.8 ;
-            float green = img(i,j,1)*0.81 -2.2 ;
-            float blue = img(i,j,2)*1.18 + 3.7 ;
-
-            if(red>255){red=255 ;}
-            if(green>255){green=255 ;}
-            if(blue>255){blue=255 ;}
-
-            output(i,j,0) = red ;
-            output(i,j,1) = green ;
-            output(i,j,2) = blue ;
-        }
-    }
-    return output ;
 }
 Image Skew(Image &img, float angle)
 {
@@ -798,7 +788,7 @@ void menu()
                       "13- Filter 13 //Add sunlight\n"
                       "14- Filter 14 //Oil Painting\n"
                       "15- Filter 15 //old tv\n"
-                      "15- Filter 16 //purple\n"
+                      "16- Filter 16 //purple\n"
                       "17- Filter 17 //Infrared\n"
                       "18- Filter 18 //Skew\n"
                       "19- Save The Image\n"
