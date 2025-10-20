@@ -4,15 +4,15 @@ A comprehensive C++ image processing application that provides 18 different filt
 
 ## 📋 Table of Contents
 - [Overview](#-overview)
-- [Features](#features)
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Filter Documentation](#filter-documentation)
-- [Team Members](#team-members)
-- [Project Structure](#project-structure)
-- [Examples](#examples)
-- [License](#license)
+- [Features](#-features)
+- [Requirements](#-requirements)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [Filter Documentation](#-filter-documentation)
+- [Team Members](#-team-members)
+- [Project Structure](#-project-structure)
+- [Examples](#-examples)
+- [License](#-license)
 
 ## 🎯 Overview
 
