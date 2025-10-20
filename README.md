@@ -227,6 +227,6 @@ This project is created for educational purposes as part of a university assignm
 
 ---
 
-**Course**: Image Processing  
+**Course**: CS213
 **Institution**: Faculty of Computers and Artificial Intelligence Cairo University
 **Academic Year**: 2024
