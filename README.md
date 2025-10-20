@@ -3,7 +3,7 @@
 A comprehensive C++ image processing application that provides 18 different filters and effects for image manipulation.
 
 ## 📋 Table of Contents
-- [Overview](#overview)
+- [Overview](#-overview)
 - [Features](#features)
 - [Requirements](#requirements)
 - [Installation](#installation)
