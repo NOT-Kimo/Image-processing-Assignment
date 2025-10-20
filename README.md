@@ -160,7 +160,7 @@ Applies a 45-degree skew transformation.
 
 ## 👥 Team Members
 
-**Under Super vision of Dr. Mohamed Elramly**
+**Under Supervision of Dr. Mohamed Elramly**
 
 ### Member 1: Karim Mohamed Ramadan
 - Filter 2: Black and White
